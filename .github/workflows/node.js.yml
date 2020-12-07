@@ -7,7 +7,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    branches: [dev]
 
 jobs:
   build:
@@ -34,6 +34,8 @@ jobs:
           # Dockerhub repo to push the build as image
           registry: docker.io
           # Docker engine
+          tags: latest
+          # Tag of the build
           username: ${{ secrets.DOCKER_USERNAME }}
           # DockerHub username as secret set in Github Secret
           password: ${{ secrets.DOCKER_PASSWORD }}
