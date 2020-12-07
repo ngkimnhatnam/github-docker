@@ -5,38 +5,36 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-      
-    - name: Build and push Docker images
-      uses: docker/build-push-action@v2.2.1
-      with:
-        image: ngkimnhatnam/github-docker
-        # Dockerhub repo to push the build as image
-        registry: docker.io
-        # Docker engine
-        username: ${{ secrets.DOCKER_USERNAME }}
-        # DockerHub username as secret set in Github Secret
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        # Dockerhub account password
-      
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
+
+      - name: Build and push Docker images
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: ngkimnhatnam/github-docker
+          # Dockerhub repo to push the build as image
+          registry: docker.io
+          # Docker engine
+          username: ${{ secrets.DOCKER_USERNAME }}
+          # DockerHub username as secret set in Github Secret
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          # Dockerhub account password
